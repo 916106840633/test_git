@@ -69,3 +69,19 @@ Total 6 (delta 4), reused 0 (delta 0), pack-reused 0
 remote: Powered by GITEE.COM [GNK-5.0]
 To gitee.com:tanglinghua/test_git.git
    3513754..cf4edaf  master -> master
+
+
+/*所以前面为什么将本地项目不能直接push到gitee上?
+因为我是预先在gitee上创建仓库然后push，预先创建的仓库本身带了一个本地没有的README.md
+所以push出错了， 当时是采取强制push -f 把README.md给覆盖掉了
+其实正确的处理方法应该是 先pull下来README.md 本地会多一个README.md 然后在进行push
+*/
+
+/*
+冲突有很多
+本质上就是两者同时对一个文件进行了操作 就可以视为冲突
+而前面那种多一个少一个文件的冲突，其实两者并没有在同一个文件上进行操作，所以pull一下统一了就行了
+
+然而，像同一个文件进行操作（增删改， 一个要删除这个文件，一个要改这个文件），那么这个冲突就会产生，而这种冲突需要人来决断
+
+*/
