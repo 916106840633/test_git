@@ -82,8 +82,99 @@ To gitee.com:tanglinghua/test_git.git
 本质上就是两者同时对一个文件进行了操作 就可以视为冲突
 而前面那种多一个少一个文件的冲突，其实两者并没有在同一个文件上进行操作，所以pull一下统一了就行了
 
-然而，像同一个文件进行操作（增删改， 一个要删除这个文件，一个要改这个文件），那么这个冲突就会产生，而这种冲突需要人来决断
+然而，像同一个文件进行操作（删改， 一个要删除这个文件，一个要改这个文件），那么这个冲突就会产生，而这种冲突需要人来决断
 
 */
 
 下面就进行实验  一个要删除这个文件，一个要改这个文件
+首先gitee和local都有一样的文件delete_or_update
+gitee上将这个文件删除
+local上将这个文件内容修改
+现在在local上尝试将修改push到gitee上
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master)
+$ git push gitee master
+To gitee.com:tanglinghua/test_git.git
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'gitee.com:tanglinghua/test_git.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+//首先和预想的一样有冲突
+//那么是直接多一个少一个文件的冲突 还是要人为鉴定的冲突呢？
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master)
+$ git pull gitee master
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 2 (delta 1), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (2/2), 246 bytes | 3.00 KiB/s, done.
+From gitee.com:tanglinghua/test_git
+ * branch            master     -> FETCH_HEAD
+   54548d7..afd56c8  master     -> gitee/master
+CONFLICT (modify/delete): delete_or_update.txt deleted in afd56c8148527da5e82e13be90e40dc2dc2c75b9 and modified in HEAD. Version HEAD of delete_or_update.txt left in tree.
+Automatic merge failed; fix conflicts and then commit the result.
+
+
+//和预想的一样是需要人为鉴定的冲突， 可以发现只要是两者在同一个文件上进行操作（删改）就需要人为鉴别
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master|MERGING)
+$ git status
+On branch master
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add/rm <file>..." as appropriate to mark resolution)
+        deleted by them: delete_or_update.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master|MERGING)
+$ cat delete_or_update.txt
+先创建这个文件
+然后gitee和local都统一
+然后gitee上删除，local上修改
+local上尝试push，看看会有什么问题
+
+
+//内容上  因为一个是删除文件 所以没有对比内容
+
+
+
+1+1=2  update on local
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master|MERGING)
+$ git add delete_or_update.txt
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master|MERGING)
+$ git commit -m "fix conflict in delete_or_update.txt"
+[master e638c7f] fix conflict in delete_or_update.txt
+
+//重新add并commit这个文件 完成冲突的修复
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master)
+$ git push gitee master
+Enumerating objects: 10, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 6 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 609 bytes | 609.00 KiB/s, done.
+Total 5 (delta 3), reused 0 (delta 0), pack-reused 0
+remote: Powered by GITEE.COM [GNK-5.0]
+To gitee.com:tanglinghua/test_git.git
+   afd56c8..e638c7f  master -> master
+
+//成功实现push
+
+
+
+*********冲突的本质***************
+如果说对项目文件的修改是原子操作，大家都是串联顺序的进行修改，那么就不会有冲突产生
+但是这里项目是并行开发的，大家可以同时对项目进行修改，
+项目作为临界资源就会产生冲突。
+需要人为鉴别的冲突就是在同一文件上并行进行操作的冲突
