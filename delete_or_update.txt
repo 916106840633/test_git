@@ -2,3 +2,6 @@
 然后gitee和local都统一
 然后gitee上删除，local上修改
 local上尝试push，看看会有什么问题
+
+
+1+1=2  update on local
