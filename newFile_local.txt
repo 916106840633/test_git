@@ -1,3 +1,22 @@
 在本地创建一个文件
 gitee上已经创建了一个新文件（已提交master），但是并没有pull下来
 现在在本地尝试push
+
+直接git push gitee master的话会出现以下问题
+To gitee.com:tanglinghua/test_git.git
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'gitee.com:tanglinghua/test_git.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+意思是
+推送失败，因为别人（云上）的最新提交和你试图推送的提交（本地）有冲突，解决办法也很简单，
+Git已经提示我们，先用git pull把最新的提交从origin/dev抓下来，然后，在本地合并，解决冲突，再推送就可以了
+
+当然这里没有冲突因为，相对于gitee上的master只是增加了新的文件，并没有在共同的部分有冲突的修改
+
+下面尝试在gitee和local都进行修改产生冲突的情况
+以上内容就是在gitee newFlie_local中进行的修改
