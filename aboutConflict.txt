@@ -1,0 +1,71 @@
+起因：gitee和local上同时对newFile_loacl的内容进行了修改
+gitee上先commit到master了
+现在尝试从local push到gitee的master上
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master)
+$ git push gitee master		########首先尝试了进行push，遇到问题是远程的内容相较于本地已经发生变化了
+To gitee.com:tanglinghua/test_git.git
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'gitee.com:tanglinghua/test_git.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+
+##########先和前面一样尝试pull 以统一内容
+/*这里和前面不一样的是
+前面只是 两者同时加了个新文件 文件的增删很快就统一了
+这里是两者在同一个文件上进行修改，于是产生冲突，而这种冲突需要人为鉴别和消除*/
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master)
+$ git pull gitee master
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), 1.03 KiB | 5.00 KiB/s, done.
+From gitee.com:tanglinghua/test_git
+ * branch            master     -> FETCH_HEAD
+   a241c99..3513754  master     -> gitee/master
+Auto-merging newFile_local.txt
+CONFLICT (content): Merge conflict in newFile_local.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master|MERGING)
+$ git status		##########用该命令查看状态 发现确实冲突了
+On branch master
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   newFile_local.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+/*冲突内容本身已经在文本内写出了
+打开相应的文件就能看到了
+那么如何做才是修改完成呢？
+就是人修改好了，再次add这个文件，就说明人为已经处理了修改*/
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master|MERGING)
+$ git add newFile_local.txt
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master|MERGING)
+$ git commit -m "conflict fixed"
+[master cf4edaf] conflict fixed
+
+tlh@DESKTOP-8G7THB4 MINGW64 /e/test_git (master)
+$ git push gitee master
+Enumerating objects: 10, done.
+Counting objects: 100% (10/10), done.
+Delta compression using up to 6 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (6/6), 708 bytes | 708.00 KiB/s, done.
+Total 6 (delta 4), reused 0 (delta 0), pack-reused 0
+remote: Powered by GITEE.COM [GNK-5.0]
+To gitee.com:tanglinghua/test_git.git
+   3513754..cf4edaf  master -> master
