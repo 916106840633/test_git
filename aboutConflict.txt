@@ -1,3 +1,13 @@
+------------------实验1-------------------------
+gitee上增加文件newFile_gitee
+local上增加文件newFile_local
+local上尝试push，有冲突
+进行pull操作，冲突就解决了（不需要人为鉴别，因为没有对一个文件同时进行的操作）
+local也有了newFile_gitee
+然后再进行push就行了
+
+
+------------------实验2-------------------------
 起因：gitee和local上同时对newFile_loacl的内容进行了修改
 gitee上先commit到master了
 现在尝试从local push到gitee的master上
@@ -85,6 +95,8 @@ To gitee.com:tanglinghua/test_git.git
 然而，像同一个文件进行操作（删改， 一个要删除这个文件，一个要改这个文件），那么这个冲突就会产生，而这种冲突需要人来决断
 
 */
+
+------------------实验3-------------------------
 
 下面就进行实验  一个要删除这个文件，一个要改这个文件
 首先gitee和local都有一样的文件delete_or_update
