@@ -1,3 +1,8 @@
 在本地创建一个文件
 gitee上已经创建了一个新文件（已提交master），但是并没有pull下来
 现在在本地尝试push
+
+
+gitee上已经对newFile_local进行了修改
+这一部分是在local上的修改
+现在尝试push到gitee上
