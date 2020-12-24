@@ -8,4 +8,5 @@
 ### git冲突处理
 
 项目作为临界资源，如果是单人开发不会有冲突产生
-冲突内容的理解和实验在文件 aboutConflict.txt 中
+
+冲突(conflict)的理解和实验在文件 aboutConflict.txt 中
